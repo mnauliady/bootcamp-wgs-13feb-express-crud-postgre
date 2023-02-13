@@ -78,8 +78,7 @@ app.post("/store", async (req, res) => {
       return res.render("create", { title: "Create Data", err, data: req.body });
     }
 
-    // console.log("kosong");
-    const newCont = await pool.query(`INSERT INTO contacts values ('${name}', '${mobile}', '${email}') RETURNING *`);
+    await pool.query(`INSERT INTO contacts values ('${name}', '${mobile}', '${email}') RETURNING *`);
     res.redirect("/contact");
   } catch (err) {
     console.error(err.message);
@@ -129,7 +128,7 @@ app.post("/contact/update", async (req, res) => {
       err.push(req.flash("message"));
     } else {
       if (err.length == 0) {
-        const newCont = await pool.query(
+        await pool.query(
           `UPDATE contacts SET name = '${newName}', email = '${newEmail}', mobile = '${newMobile}' WHERE name = '${req.body.oldName}'`
         );
       }
